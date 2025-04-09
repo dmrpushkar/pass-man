@@ -1,18 +1,25 @@
 import React from "react";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
+import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import { TabType } from "./MainLayout";
 
-const Tabs = () => {
+type TabsProps = {
+  activeTab: TabType;
+  setActiveTab: (tab: TabType) => void;
+};
+
+const Tabs = ({ activeTab, setActiveTab }: TabsProps) => {
+  const isActive = (tab: TabType) => activeTab === tab;
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
-        <Ionicons name="lock-closed-outline" size={24} color="#007AFF" />
+      <TouchableOpacity onPress={() => setActiveTab("content")} style={styles.tabButton}>
+        <Feather name="home" size={24} color={isActive("content") ? "white" : "#888"} />
       </TouchableOpacity>
-      <TouchableOpacity>
-        <Ionicons name="person-outline" size={24} color="#FFFFFF" />
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Ionicons name="settings-outline" size={24} color="#FFFFFF" />
+
+      <TouchableOpacity onPress={() => setActiveTab("settings")} style={styles.tabButton}>
+        <Ionicons name="settings-outline" size={24} color={isActive("settings") ? "white" : "#888"} />
       </TouchableOpacity>
     </View>
   );
@@ -24,9 +31,10 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     justifyContent: "space-around",
-    padding: 12,
-    borderTopColor: "#1E1E3F",
-    borderTopWidth: 1,
-    backgroundColor: "#0A0A23",
+    backgroundColor: "#1C1C2E",
+    paddingVertical: 10,
+  },
+  tabButton: {
+    padding: 10,
   },
 });

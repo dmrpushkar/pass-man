@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import { v4 as uuidv4 } from "uuid";
-import { listPasswords } from "../utils/passwordStore";
+import { listPasswords } from "../../utils/passwordStore";
 
 const mockData = [
   { id: uuidv4(), title: "Kite Profile Creds", username: "rahul", password: "pass123", category: "Finance" },
