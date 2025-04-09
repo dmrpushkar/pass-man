@@ -5,9 +5,13 @@ import Content from "./Content";
 import Tabs from "./Tabs";
 
 const MainLayout = () => {
+  const [isGroupedView, setIsGroupedView] = React.useState(true);
+
   return (
     <View style={styles.container}>
-      <Header />
+      <Header isGroupedView={false} onToggleView={function (): void {
+        throw new Error("Function not implemented.");
+      } }/>
       <Content />
       <Tabs />
     </View>

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import { v4 as uuidv4 } from "uuid";
+import { listPasswords } from "../utils/passwordStore";
 
 const mockData = [
   { id: uuidv4(), title: "Kite Profile Creds", username: "rahul", password: "pass123", category: "Finance" },
@@ -15,6 +16,19 @@ const groupedByCategory = mockData.reduce((acc, item) => {
 }, {} as Record<string, typeof mockData>);
 
 const Content = () => {
+  useEffect(() => {
+    const loadData = async () => {
+    try {
+      const passwords = await listPasswords();
+      console.log("Fetched passwords:", passwords);
+    } catch (error) {
+      console.error("Failed to load passwords:", error);
+    }
+  };
+
+  loadData();
+  }, []);
+
   return (
     <FlatList
       style={styles.container}

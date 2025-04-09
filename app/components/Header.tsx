@@ -1,20 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import AddPasswordModal from "./AddPasswordModal";
+import { savePassword } from "../utils/passwordStore";
 
 interface HeaderProps {
   title?: string;
   showBackButton?: boolean;
   onBackPress?: () => void;
   onActionPress?: () => void;
+  isGroupedView: boolean;
+  onToggleView: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
   title = "Vault",
   showBackButton = false,
   onBackPress,
-  onActionPress,
+  isGroupedView,
+  onToggleView,
 }) => {
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const handleSavePassword = async (key: string, password: string, category: string) => {
+    try {
+      await savePassword(key, password, category);
+      alert("Password saved!");
+      setModalVisible(false);
+    } catch (error: any) {
+      alert(error.message);
+    }
+  };
+
   return (
     <View style={styles.header}>
       {showBackButton ? (
@@ -27,9 +44,27 @@ const Header: React.FC<HeaderProps> = ({
 
       <Text style={styles.title}>{title}</Text>
 
-      <TouchableOpacity onPress={onActionPress}>
-        <Ionicons name="add-circle-outline" size={28} color="#007AFF" />
-      </TouchableOpacity>
+      <View style={styles.actions}>
+        {/* Toggle View Button */}
+        <TouchableOpacity onPress={onToggleView} style={styles.iconButton}>
+          <Ionicons
+            name={isGroupedView ? "grid-outline" : "list-outline"}
+            size={24}
+            color="#007AFF"
+          />
+        </TouchableOpacity>
+
+        {/* Add Password Button */}
+        <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.iconButton}>
+          <Ionicons name="add-circle-outline" size={28} color="#007AFF" />
+        </TouchableOpacity>
+      </View>
+
+      <AddPasswordModal
+        visible={isModalVisible}
+        onClose={() => setModalVisible(false)}
+        onSave={handleSavePassword}
+      />
     </View>
   );
 };
@@ -49,5 +84,12 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 20,
     fontWeight: "bold",
+  },
+  actions: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  iconButton: {
+    marginLeft: 12,
   },
 });
